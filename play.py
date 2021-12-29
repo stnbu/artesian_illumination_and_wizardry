@@ -3,7 +3,7 @@ from PyQt5.QtCore import QByteArray
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QApplication, QWidget
 
-points = [(0, 90), (100, 140), (220, 310), (420, 370), (510, 330)]
+points = [(0, 90), (10, 14), (220, 31), (420, 37), (510, 33)]
 
 circle = b"""
 <svg height="100" width="100">
@@ -13,7 +13,7 @@ circle = b"""
 """
 
 my_blob = b"""
-<svg height="100" width="100">
+<svg height="100%" width="100%">
 <polygon fill="blue" points="0,90 10,14 22,31 42,37 51,33" />
 </svg>
 """
@@ -25,12 +25,11 @@ class MainWindow(QWidget):
         self.widgetSvg = QSvgWidget(parent=self)
         self.widgetSvg.setGeometry(10, 10, 1080, 1080)
 
-        # frame = svgwrite.Drawing("/tmp/aiw.svg", profile="tiny")
-        # frame.add(frame.polygon(points, fill="blue"))
-        # xxx = bytes(frame.tostring(), encoding='utf8')
-        # import ipdb; ipdb.set_trace()
+        frame = svgwrite.Drawing("/tmp/aiw.svg", profile="tiny")
+        frame.add(frame.polygon(points, fill="blue"))
+        xxx = bytes(frame.tostring(), encoding='utf8')
 
-        self.widgetSvg.load(my_blob)
+        self.widgetSvg.load(xxx)
 
 if __name__ == "__main__":
     app = QApplication([])
