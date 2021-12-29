@@ -9,9 +9,6 @@ points = [(0, 0), (size, 0), (size, size), (0, size)]
 
 SVG_PATH = "/tmp/aiw.svg"
 
-def path_to_bytes(path):
-    return open(path, "rb").read()
-
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -22,10 +19,10 @@ class MainWindow(QWidget):
 
         self.palette = QSvgWidget(parent=self)
         self.palette.setGeometry(10, 10, 1080, 1080)
-        self.palette.load(path_to_bytes(SVG_PATH))
+        self.palette.load(SVG_PATH)
 
     def on_file_changed(self, path):
-        self.palette.load(path_to_bytes(path))
+        self.palette.load(path)
 
 if __name__ == "__main__":
     app = QApplication([])
