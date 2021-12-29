@@ -12,19 +12,28 @@ class MainWindow(QWidget):
         self.palette = QSvgWidget(parent=self)
         self.palette.setGeometry(10, 10, 1080, 1080)
         self.palette.load(self.path)
+
         self.file_watcher = QFileSystemWatcher()
         self.file_watcher.fileChanged.connect(self.palette.load)
         self.file_watcher.addPaths([self.path])
-        self.palette.load(self.path)
 
 if __name__ == "__main__":
     app = QApplication([])
     try:
         path = sys.argv[1]
-        assert os.path.exists(path) # you cannot start with an nonexistent file; QT limitation.
     except:
         print("Usage: %s <path_to_svg_file>" % os.path.basename(__file__), file=sys.stderr)
         sys.exit(1)
+    if not os.path.exists(path):
+        import time
+        complained = False
+        while not os.path.exists(path):
+            if not complained:
+                print("Waiting for file '%s' to appear..." %
+                      os.path.basename(__file__), file=sys.stderr)
+            complained = True
+            time.sleep(0.5)
+
     window = MainWindow(path)
     window.show()
     app.exec()
