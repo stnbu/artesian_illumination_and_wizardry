@@ -12,6 +12,12 @@ circle = b"""
 </svg>
 """
 
+my_blob = b"""
+<svg height="100" width="100">
+<polygon fill="blue" points="0,90 10,14 22,31 42,37 51,33" />
+</svg>
+"""
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -19,12 +25,12 @@ class MainWindow(QWidget):
         self.widgetSvg = QSvgWidget(parent=self)
         self.widgetSvg.setGeometry(10, 10, 1080, 1080)
 
-        # self.frame = svgwrite.Drawing("/tmp/aiw.svg", profile="tiny")
-        # self.frame.add(self.frame.polygon(points, fill="blue"))
-        # xml = self.frame.tostring()
-        # self.xml = QByteArray(bytes(xml, encoding='utf8'))
+        # frame = svgwrite.Drawing("/tmp/aiw.svg", profile="tiny")
+        # frame.add(frame.polygon(points, fill="blue"))
+        # xxx = bytes(frame.tostring(), encoding='utf8')
+        # import ipdb; ipdb.set_trace()
 
-        self.widgetSvg.load(circle)
+        self.widgetSvg.load(my_blob)
 
 if __name__ == "__main__":
     app = QApplication([])
