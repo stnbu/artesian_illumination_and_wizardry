@@ -11,7 +11,7 @@ class MainWindow(QWidget):
         super().__init__()
         self.palette = QSvgWidget(parent=self)
         self.palette.setGeometry(10, 10, 1080, 1080)
-        frame = svgwrite.Drawing(None, profile="tiny")
+        frame = svgwrite.Drawing(None)
         frame.add(frame.polygon(points, fill="blue"))
         self.palette.load(bytes(frame.tostring(), encoding='utf8'))
 
