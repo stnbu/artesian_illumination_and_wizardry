@@ -2,7 +2,9 @@ import svgwrite
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QApplication, QWidget
 
-points = [(0, 90), (10, 14), (220, 31), (420, 37), (510, 33)]
+size = 30
+
+points = [(0, 0), (size, 0), (size, size), (0, size)]
 
 class MainWindow(QWidget):
     def __init__(self):
