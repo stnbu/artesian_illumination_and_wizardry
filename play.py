@@ -1,5 +1,4 @@
 import svgwrite
-from PyQt5.QtCore import QByteArray
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QApplication, QWidget
 
