@@ -1,35 +1,34 @@
 import svgwrite, webbrowser, math, os
 from sympy import Matrix
 
-def get_rotate_matrix(angle):
-    return Matrix(
+def transform(points, **transforms):
+    rotate = transforms.pop('rotate')
+
+    angle = rotate['angle']
+    about_x, about_y = rotate['about']
+
+    r = Matrix(
         [
             [math.cos(angle), -math.sin(angle)],
             [math.sin(angle), math.cos(angle)],
         ]
     )
 
-points = [(0, 0), (50, 0), (50, 50), (0, 50)]
-
-num_frames = 90
-total_angle = math.pi / 4
-angle_delta = num_frames / num_frames
-delta_rotate_matrix = get_rotate_matrix(angle_delta)
-
-# frame = svgwrite.Drawing("foo.svg", profile="tiny")
-# frame.add(frame.polygon(points, fill="blue"))
-# frame.save()
-
-def new_points(r):
+    rotated_about_x, rotated_about_y = r * Matrix([about_x, about_y])
+    d_x, d_y = rotated_about_x - about_x, rotated_about_y - about_y
     for point in points:
         x, y = r * Matrix(point)
-        yield int(x), int(y)
-
-r = get_rotate_matrix(math.pi / 4)
-
-frame = svgwrite.Drawing("foo.svg", profile="tiny")
-frame.add(frame.polygon(new_points(r), fill="blue"))
-frame.save()
+        yield int(x - d_x), int(y - d_y)
 
 if __name__ == "__main__":
-    pass
+    points = [(0, 0), (50, 0), (50, 50), (0, 50)]
+    frame = svgwrite.Drawing("foo.svg", profile="tiny")
+    p = transform(points,
+                  rotate=dict(
+                      angle=math.pi / 3,
+                      about=[25, 25]
+                  )
+    )
+    frame.add(frame.polygon(p, fill="blue"))
+    frame.add(frame.circle(center=(25,25), r=1, fill="black"))
+    frame.save()
