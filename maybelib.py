@@ -1,11 +1,12 @@
 import svgwrite, webbrowser, math, os
 from sympy import Matrix
 
-def transform(points, **transforms):
-    rotate = transforms.pop('rotate')
 
-    angle = rotate['angle']
-    about_x, about_y = rotate['about']
+def transform(points, **transforms):
+    rotate = transforms.pop("rotate")
+
+    angle = rotate["angle"]
+    about_x, about_y = rotate["about"]
 
     r = Matrix(
         [
@@ -20,15 +21,11 @@ def transform(points, **transforms):
         x, y = r * Matrix(point)
         yield int(x - d_x), int(y - d_y)
 
+
 if __name__ == "__main__":
     points = [(0, 0), (50, 0), (50, 50), (0, 50)]
     frame = svgwrite.Drawing("foo.svg", profile="tiny")
-    p = transform(points,
-                  rotate=dict(
-                      angle=math.pi / 3,
-                      about=[25, 25]
-                  )
-    )
+    p = transform(points, rotate=dict(angle=math.pi / 3, about=[25, 25]))
     frame.add(frame.polygon(p, fill="blue"))
-    frame.add(frame.circle(center=(25,25), r=1, fill="black"))
+    frame.add(frame.circle(center=(25, 25), r=1, fill="black"))
     frame.save()
