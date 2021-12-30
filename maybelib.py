@@ -23,9 +23,12 @@ def transform(points, **transforms):
 
 
 if __name__ == "__main__":
+    import time
     points = [(0, 0), (50, 0), (50, 50), (0, 50)]
-    frame = svgwrite.Drawing("foo.svg", profile="tiny")
-    p = transform(points, rotate=dict(angle=math.pi / 3, about=[25, 25]))
-    frame.add(frame.polygon(p, fill="blue"))
-    frame.add(frame.circle(center=(25, 25), r=1, fill="black"))
-    frame.save()
+    for i in range(0, 50):
+        frame = svgwrite.Drawing("foo.svg", profile="tiny")
+        p = transform(points, rotate=dict(angle=(math.pi / 1000)*i*2, about=[50, 50]))
+        frame.add(frame.polygon(p, fill="blue"))
+        frame.add(frame.circle(center=(25, 25), r=1, fill="black"))
+        frame.save()
+        time.sleep(0.2)
