@@ -21,27 +21,71 @@ def transform(points, transforms):
                 x, y = r * Matrix(point)
                 yield int(x - d_x), int(y - d_y)
         elif transform['type'] == SCALE:
-            raise NotImplementedError
+            factor = transform["factor"]
+            about_x, about_y = transform["about"]
+            s = Matrix(
+                [
+                    [factor, 0,      0],
+                    [0,      factor, 0],
+                    [0,      0,      1],
+                ]
+            )
+            rotated_about_x, rotated_about_y, _ = s * Matrix([about_x, about_y, 1])
+            d_x, d_y = rotated_about_x - about_x, rotated_about_y - about_y
+            for point in points:
+                x, y, _ = s * Matrix(list(point) + [1])
+                yield int(x - d_x), int(y - d_y)
         else:
             raise ValueError("Unknown transform type %s" % transform['type'])
 
 
 
 if __name__ == "__main__":
-    import time
-    points = [(0, 0), (50, 0), (50, 50), (0, 50)]
-    for i in range(0, 50):
+
+    import sys
+    num_cases = 2
+    selection = None
+
+    def help():
+        print("Choose a testcase in [0, %d]" % (num_cases - 1), file=sys.stderr)
+        sys.exit(1)
+
+    if len(sys.argv) > 1:
+        try:
+            selection = int(sys.argv[1])
+        except:
+            help()
+
+    if selection == 0:
+        points = [(0, 0), (10, 0), (10, 10), (0, 10)]
+        frame = svgwrite.Drawing("foo.svg", profile="tiny")
+        p = transform(
+            points,
+            [
+                dict(
+                    type=SCALE,
+                    about=[5, 5],
+                    factor=2,
+                )
+            ]
+        )
+        frame.add(frame.polygon(p, fill="blue"))
+        frame.save()
+
+    elif selection == 1:
+        points = [(0, 0), (50, 0), (50, 50), (0, 50)]
         frame = svgwrite.Drawing("foo.svg", profile="tiny")
         p = transform(
             points,
             [
                 dict(
                     type=ROTATE,
-                    angle=(math.pi / 1000)*i*2,
+                    angle=math.pi / 4,
                     about=[50, 50])
             ]
         )
         frame.add(frame.polygon(p, fill="blue"))
-        frame.add(frame.circle(center=(25, 25), r=1, fill="black"))
         frame.save()
-        time.sleep(0.2)
+
+    else:
+        help()
