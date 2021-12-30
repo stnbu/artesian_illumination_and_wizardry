@@ -3,6 +3,7 @@ from sympy import Matrix
 
 ROTATE = 0
 SCALE = 1
+TRANSLATE = 2
 
 def transform(points, transforms):
     for transform in transforms:
@@ -35,6 +36,8 @@ def transform(points, transforms):
             for point in points:
                 x, y, _ = s * Matrix(list(point) + [1])
                 yield int(x - d_x), int(y - d_y)
+        elif transform['type'] == TRANSLATE:
+            raise NotImplementedError
         else:
             raise ValueError("Unknown transform type %s" % transform['type'])
 
@@ -86,6 +89,16 @@ if __name__ == "__main__":
         )
         frame.add(frame.polygon(p, fill="blue"))
         frame.save()
-
+    elif selection == 2:
+        points = [(0, 0), (50, 0), (50, 50), (0, 50)]
+        frame = svgwrite.Drawing("foo.svg", profile="tiny")
+        p = transform(
+            points,
+            [
+                dict(type=TRANSLATE)
+            ]
+        )
+        frame.add(frame.polygon(p, fill="blue"))
+        frame.save()
     else:
         help()
