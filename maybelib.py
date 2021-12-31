@@ -17,10 +17,10 @@ def transform(points, transforms):
                 ]
             )
             rotated_about_x, rotated_about_y = r * Matrix([about_x, about_y])
-            d_x, d_y = rotated_about_x - about_x, rotated_about_y - about_y
+            dx, dy = rotated_about_x - about_x, rotated_about_y - about_y
             for point in points:
                 x, y = r * Matrix(point)
-                yield int(x - d_x), int(y - d_y)
+                yield int(x - dx), int(y - dy)
         elif transform['type'] == SCALE:
             factor = transform["factor"]
             about_x, about_y = transform["about"]
@@ -32,10 +32,10 @@ def transform(points, transforms):
                 ]
             )
             rotated_about_x, rotated_about_y, _ = s * Matrix([about_x, about_y, 1])
-            d_x, d_y = rotated_about_x - about_x, rotated_about_y - about_y
+            dx, dy = rotated_about_x - about_x, rotated_about_y - about_y
             for point in points:
                 x, y, _ = s * Matrix(list(point) + [1])
-                yield int(x - d_x), int(y - d_y)
+                yield int(x - dx), int(y - dy)
         elif transform['type'] == TRANSLATE:
             raise NotImplementedError
         else:
