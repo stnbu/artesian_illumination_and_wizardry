@@ -37,7 +37,9 @@ def transform(points, transforms):
                 x, y, _ = s * Matrix(list(point) + [1])
                 yield int(x - dx), int(y - dy)
         elif transform['type'] == TRANSLATE:
-            raise NotImplementedError
+            dx, dy = transform['delta']
+            for x, y in points:
+                yield int(x + dx), int(y + dy)
         else:
             raise ValueError("Unknown transform type %s" % transform['type'])
 
@@ -46,7 +48,7 @@ def transform(points, transforms):
 if __name__ == "__main__":
 
     import sys
-    num_cases = 2
+    num_cases = 3
     selection = None
 
     def help():
@@ -90,12 +92,14 @@ if __name__ == "__main__":
         frame.add(frame.polygon(p, fill="blue"))
         frame.save()
     elif selection == 2:
-        points = [(0, 0), (50, 0), (50, 50), (0, 50)]
+        points = [(0, 0), (10, 0), (10, 10), (0, 10)]
         frame = svgwrite.Drawing("foo.svg", profile="tiny")
+        frame.add(frame.polygon(points, fill="green"))
         p = transform(
             points,
             [
-                dict(type=TRANSLATE)
+                dict(
+                    type=TRANSLATE, delta=[30, 30])
             ]
         )
         frame.add(frame.polygon(p, fill="blue"))
