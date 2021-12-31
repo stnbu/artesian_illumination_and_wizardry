@@ -22,12 +22,12 @@ def transform(points, transforms):
                 x, y = r * Matrix(point)
                 yield int(x - dx), int(y - dy)
         elif transform['type'] == SCALE:
-            factor = transform["factor"]
+            sx, sy = transform["factor"]
             about_x, about_y = transform["about"]
             s = Matrix(
                 [
-                    [factor, 0,      0],
-                    [0,      factor, 0],
+                    [sx,     0,      0],
+                    [0,      sy    , 0],
                     [0,      0,      1],
                 ]
             )
@@ -70,7 +70,7 @@ if __name__ == "__main__":
                 dict(
                     type=SCALE,
                     about=[5, 5],
-                    factor=2,
+                    factor=[2, 4],
                 )
             ]
         )
