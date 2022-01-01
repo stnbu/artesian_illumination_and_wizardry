@@ -1,4 +1,4 @@
-import svgwrite, webbrowser, math, os
+import math, os, svgwrite
 from sympy import Matrix
 
 ROTATE = 0
