@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, sys, svgwrite
+import os, sys
 from PyQt5.QtCore import QFileSystemWatcher
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QApplication, QWidget
