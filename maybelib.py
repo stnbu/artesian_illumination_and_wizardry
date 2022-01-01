@@ -5,14 +5,20 @@ ROTATE = 0
 SCALE = 1
 TRANSLATE = 2
 
+class tspec:
+
+    def __init__(self, type_, **params):
+        self.type = type_
+        self.__dict__.update(params)
+
 def get_transformer(transform):
-    if transform['type'] == ROTATE:
-        angle = transform["angle"]
-        about_x, about_y = transform["about"]
+    if transform.type == ROTATE:
+        angle = transform.angle
+        about_x, about_y = transform.about
         r = Matrix(
             [
                 [math.cos(angle), -math.sin(angle)],
-                [math.sin(angle), math.cos(angle)],
+                [math.sin(angle),  math.cos(angle)],
             ]
         )
         rotated_about_x, rotated_about_y = r * Matrix([about_x, about_y])
@@ -21,9 +27,9 @@ def get_transformer(transform):
             for point in points:
                 x, y = r * Matrix(point)
                 yield int(x - dx), int(y - dy)
-    elif transform['type'] == SCALE:
-        sx, sy = transform["factor"]
-        about_x, about_y = transform["about"]
+    elif transform.type == SCALE:
+        sx, sy = transform.factor
+        about_x, about_y = transform.about
         s = Matrix(
             [
                 [sx,     0,      0],
@@ -37,13 +43,13 @@ def get_transformer(transform):
             for point in points:
                 x, y, _ = s * Matrix(list(point) + [1])
                 yield int(x - dx), int(y - dy)
-    elif transform['type'] == TRANSLATE:
-        dx, dy = transform['delta']
+    elif transform.type == TRANSLATE:
+        dx, dy = transform.delta
         def worker(points):
             for x, y in points:
                 yield int(x + dx), int(y + dy)
     else:
-        raise ValueError("Unknown transform type %s" % transform['type'])
+        raise ValueError("Unknown transform type %s" % transform.type)
 
     return worker
 
@@ -68,8 +74,8 @@ if __name__ == "__main__":
         points = [(0, 0), (10, 0), (10, 10), (0, 10)]
         frame = svgwrite.Drawing("foo.svg", profile="tiny")
         transformer = get_transformer(
-            dict(
-                type=SCALE,
+            tspec(
+                SCALE,
                 about=[5, 5],
                 factor=[2, 4],
             )
@@ -80,8 +86,8 @@ if __name__ == "__main__":
         points = [(0, 0), (50, 0), (50, 50), (0, 50)]
         frame = svgwrite.Drawing("foo.svg", profile="tiny")
         transformer = get_transformer(
-                dict(
-                    type=ROTATE,
+                tspec(
+                    ROTATE,
                     angle=math.pi / 4,
                     about=[50, 50])
         )
@@ -92,8 +98,8 @@ if __name__ == "__main__":
         frame = svgwrite.Drawing("foo.svg", profile="tiny")
         frame.add(frame.polygon(points, fill="green"))
         transformer = get_transformer(
-                dict(
-                    type=TRANSLATE, delta=[30, 30])
+                tspec(
+                    TRANSLATE, delta=[30, 30])
         )
         frame.add(frame.polygon(transformer(points), fill="blue"))
         frame.save()
