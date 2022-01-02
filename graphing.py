@@ -11,8 +11,11 @@ frame = svgwrite.Drawing("foo2.svg")
 
 frame.defs.add(frame.style('* {font-size: 9px;}'))
 
-for i in range(0, 20):
-    t = scale - ((scale/10) * i)
+lines = 20
+step = lines / 2
+
+for i in range(0, lines):
+    t = scale - ((scale/step) * i)
     if t == 0:
         continue
 
