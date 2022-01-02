@@ -1,3 +1,15 @@
+"""
+For your help!
+
+Cartesian   Screen
+---------   ----------
+(0, 0)      (500, 500)
+(1, 0)      (550, 500)
+(1, 1)      (550, 450)
+(0, 1)      (500, 450)
+"""
+
+
 import math, os, svgwrite
 
 scale = 500
@@ -32,4 +44,27 @@ frame.add(frame.line(start=C(-scale, 0), end=C(scale, 0), stroke='red', stroke_w
 frame.add(frame.line(start=C(0, scale), end=C(0, -scale), stroke='red', stroke_width=1))
 frame.add(frame.circle(C(0, 0), 1, fill='black', stroke='black'))
 
+def RC(x, y):
+    return C(x * 50, y * 50)
+
+
+def graph(f):
+    points = []
+    granularity = 1
+    step = scale * granularity
+    for x in range(-step, step):
+        rx = x / 50 / granularity
+        points.append(RC(rx, f(rx)))
+
+    frame.add(frame.polyline(points, stroke="green", stroke_width=1))
+
+def f(x):
+    return x**2
+
+graph(f)
+
 frame.save()
+
+# for x, y in [(0, 0), (1, 0), (1, 1), (0, 1)]:
+#     screen_x, screen_y = RC(x, y)
+#     print("(%d, %d) --> (%d, %d)" % (x, y, screen_x, screen_y))
