@@ -22,11 +22,11 @@ for i in range(0, lines):
     text_x, text_y = C(3, -11)
     frame.add(frame.line(start=C(-scale, t), end=C(scale, t), stroke='lightgrey', stroke_width=1))
     frame.add(frame.circle(C(t, 0), 1, fill='black', stroke='black'))
-    frame.add(frame.text("%d" % (t//50), x=[text_x + t], y=[text_y], fill='black'))
+    frame.add(frame.text("%d" % (t//(scale/step)), x=[text_x + t], y=[text_y], fill='black'))
 
     frame.add(frame.line(start=C(t, scale), end=C(t, -scale), stroke='lightgrey', stroke_width=1))
     frame.add(frame.circle(C(0, t), 1, fill='black', stroke='black'))
-    frame.add(frame.text("%d" % (t//50), x=[text_x], y=[text_y + t], fill='black'))
+    frame.add(frame.text("%d" % (t//(scale/step)), x=[text_x], y=[text_y + t], fill='black'))
 
 frame.add(frame.line(start=C(-scale, 0), end=C(scale, 0), stroke='red', stroke_width=1))
 frame.add(frame.line(start=C(0, scale), end=C(0, -scale), stroke='red', stroke_width=1))
